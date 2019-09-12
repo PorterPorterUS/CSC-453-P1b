@@ -281,7 +281,13 @@ end
 
 class P1_Test
   def self.testSets
-    return [AllTests, ChunkTests, SliceAfterTests]
+	  return [AllTests, ChunkTests, SliceAfterTests
+=begin
+	InjectTests, CollectTests, FindTests, MinmaxTests, SelectTests, EachWithIndexTests, MaxTests, ZipTests		  
+	  
+=end
+]
+
   end
 
   testSets.each{ |testSet| extend testSet }
