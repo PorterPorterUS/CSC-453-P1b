@@ -205,7 +205,7 @@ module MaxTests
   end
 
   def Max_Integers_Set
-    return TestResult.new([1,2,3,-1,0,14,-1,0,3,2,1].p1_max(5), [2,2,3,3,14])
+    return TestResult.new([1,2,3,-1,0,14,-1,0,3,2,1].p1_max(5), [14,3,3,2,2])
   end
 
   def Max_Strings
@@ -213,7 +213,7 @@ module MaxTests
   end
 
   def Max_Strings_Set
-    return TestResult.new(["daryl","alpha","was","net","beta",'here'].p1_max(3), ["here","net","was"])
+    return TestResult.new(["daryl","alpha","was","net","beta",'here'].p1_max(3), ["was", "net", "here"])
   end
 
   def Max_Block
@@ -221,7 +221,7 @@ module MaxTests
   end
 
   def Max_Block_Set
-    return TestResult.new(['014','21','17','10'].p1_max(2){ |a,b| a.to_i <=> b.to_i }, ['17',"21"])
+    return TestResult.new(['014','21','17','10'].p1_max(2){ |a,b| a.to_i <=> b.to_i }, ["21", "17"])
   end
 end
 
@@ -281,9 +281,9 @@ end
 
 class P1_Test
   def self.testSets
-	  return [AllTests, ChunkTests, SliceAfterTests
+	  return [AllTests, ChunkTests, SliceAfterTests, MinmaxTests, MaxTests
 =begin
-	InjectTests, CollectTests, FindTests, MinmaxTests, SelectTests, EachWithIndexTests, MaxTests, ZipTests		  
+	InjectTests, CollectTests, FindTests, SelectTests, EachWithIndexTests, ZipTests		  
 	  
 =end
 ]
@@ -373,6 +373,7 @@ class TestP1 <  Minitest::Test
     res2 = [:foo, :bar].p1_select { |x| x == :foo }
     assert_equal res1, res2
   end
+=end
 
   def test_p1_max
     a = %w(albatross dog horse)
@@ -414,7 +415,6 @@ class TestP1 <  Minitest::Test
     res2 = [5, 1, 3, 4, 2].p1_max(3)
     assert_equal res1, res2
   end
-=end
   
   def test_p1_chunk
     res1 = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5].p1_chunk { |n|
@@ -521,7 +521,7 @@ class TestP1 <  Minitest::Test
     res2 = (1..10).p1_find(lambda {1+1})   { |i| i % 5 == 0 and i % 7 == 0 }
     assert_equal res1, res2
   end
-
+=end
   def test_p1_minmax
     a = %w(albatross dog horse)
     res1 = a.minmax
@@ -542,7 +542,7 @@ class TestP1 <  Minitest::Test
     res2 = a.p1_minmax
     assert_equal(res1, res2)
   end
-=end
+
   def test_p1_slice_after
     lines = ["foo\n", "bar\\\n", "baz\n", "\n", "qux\n"]
     res1 = lines.slice_after(/(?<!\\)\n\z/).to_a
@@ -749,6 +749,7 @@ describe "Array: P1" do
                         result.must_equal 20
                 end
         end
+=end
 
 	describe "max " do
 		it "Return the max result as it is" do
@@ -834,7 +835,7 @@ describe "Array: P1" do
                 end
 
 	end
-
+=begin
 	describe "select " do
                 it "Select all the even numbers" do
                         result = [1, 2, 3, 4, 5].p1_select do |num|
@@ -1043,7 +1044,7 @@ class TestP1 < Minitest::Test
 		standard = [1, 2 ,3 ,4 ,5].select { |num| num.even? }.to_a
 		assert_equal standard, result
 	end
-
+=end
 	def test_p1_minmax_1
 		a = %w(dog alfdsfad horse)
 		result = a.p1_minmax { |a, b| a.length <=> b.length }
@@ -1089,7 +1090,7 @@ class TestP1 < Minitest::Test
 		assert_equal standard, result
 	end
 
-
+=begin
 	def test_p1_find_1
 		result = (1..10).p1_find
 		standard = (1..10).find.to_a
@@ -1317,7 +1318,7 @@ class P1Test < Minitest::Test
 		assert_equal str_sample.p1_find {|item| item.length>2},str_sample.find {|item| item.length>1}
 		assert_equal hash_sample.p1_find {|item| item.first>1},hash_sample.find {|item| item.first>1}
 	end
-
+=end
 	def test_max
 		array_sample1=Array.new
 		array_sample2=Array.new([3,2,6,3])
@@ -1342,7 +1343,7 @@ class P1Test < Minitest::Test
 		assert_equal str_sample.p1_minmax,str_sample.minmax
 		assert_equal str_sample.p1_minmax {|a, b| a.length <=> b.length},str_sample.minmax {|a, b| a.length <=> b.length}
 	end
-=end
+	
 	def test_slice_after
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(["foo\n", "bar\\\n", "baz\n", "\n", "qux\n"])
