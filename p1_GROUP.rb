@@ -1,5 +1,6 @@
 =begin
        	CSC 253/453 Project 1b: Itertors in Ruby
+	September 17 2019
 =end
 
 module P1
@@ -21,8 +22,9 @@ module P1
    
    	def p1_chunk #2
  		result = inject [] do |acc, e|
-			return acc if !block_given? or yield(e).nil?
-			if acc.empty? or acc.last[0] != yield(e)
+			if !block_given? or yield(e).nil?
+				acc
+			elsif acc.empty? or acc.last[0] != yield(e)
 				acc << [yield(e), [e]]
 			else
 				(acc[-1][1] << e) && acc
@@ -30,7 +32,7 @@ module P1
 		end
 		result.to_enum
    	end
-   
+
    	def p1_slice_after(*args) #10
 		if block_given?
 			raise ArgumentError.new("both pattern and block are given") if args.length > 0
@@ -45,13 +47,15 @@ module P1
                                 yield(e)
                         end
                 end			
-		result = inject [] do |acc, e|
-			if acc.empty? or match[acc.last.last]
-                                acc << [e]
-                        else
+		result = inject [[]] do |acc, e|
+			if !match[e]
                                 (acc[-1] << e) && acc
+			else
+				acc[-1] << e
+				(acc << []) && acc
                         end
                 end
+		result.pop if result[-1] == []
 		result.to_enum
    	end
 
