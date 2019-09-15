@@ -4,7 +4,60 @@
 =end
 
 module P1
-   	def p1_all?(pattern = nil) #1
+	def p1_inject(*args)
+		if args.length == 2
+			raise TypeError, "#{args[1]} is not a symbol nor a string" unless [String, Symbol].member? args[1].class
+			accumulator = args[0]
+			operation = -> x, y { x.send(args[1], y) }
+		elsif args.length == 1
+			if block_given?
+				accumulator = args[0]
+				operation = -> x, y { yield(x, y) }
+			else
+				raise TypeError, "#{args[0]} is not a symbol nor a string" unless [String, Symbol].member? args[0].class
+				accumulator == nil
+				operation = -> x, y { x.send(args[0], y) }
+			end
+		elsif args.length == 0
+                        accumulator = nil
+			operation = -> x, y { yield(x, y) }
+		else
+			raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 0..2)"
+		end
+
+		if accumulator.nil?
+			ignore_first = true
+			accumulator = first
+		end
+
+		is_first = true
+		self.each do |element|
+			unless is_first && ignore_first
+				accumulator = operation[accumulator, element]
+			end
+			is_first = false
+		end
+		accumulator
+	end
+
+	def p1_find(ifnone = nil)
+		result = nil
+		found = false
+		if block_given?
+			self.each do |element|
+				if yield element
+					result = element
+					found = true
+					break
+				end
+			end
+			found ? result : ifnone && ifnone.call
+		else
+			return self.to_enum
+		end
+	end
+
+	def p1_all?(pattern = nil)
 		match = lambda do |e|
 			if !pattern.nil?
 				pattern === e
@@ -20,7 +73,7 @@ module P1
       		true
    	end
    
-   	def p1_chunk #2
+	def p1_chunk
  		result = inject [] do |acc, e|
 			if !block_given? or yield(e).nil?
 				acc
@@ -33,7 +86,7 @@ module P1
 		result.to_enum
    	end
 
-   	def p1_slice_after(*args) #10
+	def p1_slice_after(*args)
 		if block_given?
 			raise ArgumentError.new("both pattern and block are given") if args.length > 0
 		else

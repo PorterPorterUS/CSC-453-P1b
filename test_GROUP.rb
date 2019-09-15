@@ -35,7 +35,7 @@ module InjectTests
   end
 
   def Inject_Error_No_Args
-    result = TestResult.new("","an error was raised")
+    result = TestResult.new("","no error was raised")
     begin
       ["Hi"].p1_inject
     rescue ArgumentError
@@ -45,12 +45,11 @@ module InjectTests
     end
     return result
   end
-
   def Inject_Error_Bad_Args
     result = TestResult.new("","an error was raised")
     begin
       ["Hi"].p1_inject(2014)
-    rescue ArgumentError
+    rescue TypeError
       result.actual = "an error was raised"
     else
       result.actual = "no error was raised"
@@ -107,14 +106,16 @@ module FindTests
   def Find_Singleton_Fail
     return TestResult.new([2014].p1_find{ |i| i%2 == 1 },nil)
   end
-
+=begin
   def Find_If_None
     return TestResult.new(["Yolo","Swag"].p1_find(:none){ |i| i.class == Symbol }, :none)
   end
+=end
 
   def Find_Goose
     return TestResult.new(["Duck","Duck","Duck","Goose","Duck","Goosed","Duck","Goose, Duck"].p1_find(){ |i| /Goose/ === i }, "Goose")
   end
+
 end
 
 module MinmaxTests
@@ -281,9 +282,9 @@ end
 
 class P1_Test
   def self.testSets
-	  return [AllTests, ChunkTests, SliceAfterTests, MinmaxTests, MaxTests
+	  return [AllTests, ChunkTests, SliceAfterTests, MinmaxTests, MaxTests, InjectTests, FindTests
 =begin
-	InjectTests, CollectTests, FindTests, SelectTests, EachWithIndexTests, ZipTests		  
+	CollectTests, SelectTests, EachWithIndexTests, ZipTests		  
 	  
 =end
 ]
@@ -311,7 +312,7 @@ P1_Test.run
 
 class TestP1 <  Minitest::Test
 
-=begin
+
   def test_p1_inject_with_block
     res1 = (5..10).p1_inject { |sum, n| sum + n }
     res2 = (5..10).inject { |sum, n| sum + n }
@@ -336,6 +337,7 @@ class TestP1 <  Minitest::Test
     assert_equal res1, res2
   end
 
+=begin
   def test_p1_collect
     res1 = (1..4).collect { |i| i*i }
     res2 = (1..4).p1_collect { |i| i*i }
@@ -503,7 +505,7 @@ class TestP1 <  Minitest::Test
     a.zip(b) { |x, y| c2 << x + y }
     assert_equal c1, c2
   end
-
+=end
   def test_p1_find
     res1 = (1..10).find   { |i| i % 5 == 0 and i % 7 == 0 }
     res2 = (1..10).p1_find   { |i| i % 5 == 0 and i % 7 == 0 }
@@ -521,7 +523,7 @@ class TestP1 <  Minitest::Test
     res2 = (1..10).p1_find(lambda {1+1})   { |i| i % 5 == 0 and i % 7 == 0 }
     assert_equal res1, res2
   end
-=end
+
   def test_p1_minmax
     a = %w(albatross dog horse)
     res1 = a.minmax
@@ -554,7 +556,7 @@ end
 # SOUBHIK_GHOSH
 
 describe "Array: P1" do
-=begin
+
 	describe "inject " do
 		it "Sum all numbers with initial" do
                  	result = [1, 2, 3, 4].p1_inject 5 do |sum, e|
@@ -603,6 +605,7 @@ describe "Array: P1" do
                 end
 	end
 
+=begin
 	describe "collect " do
 		before do
 			@input_arr = [1, 2, 3, 4]
@@ -727,7 +730,7 @@ describe "Array: P1" do
 			is_called.must_equal false
                 end
         end
-
+=end
 	describe "find " do
                 it "Won't find an element and return nil" do
 			result = [*(2..10)].p1_find { |i| i % 5 == 0 and i % 7 == 0 } 	
@@ -749,7 +752,7 @@ describe "Array: P1" do
                         result.must_equal 20
                 end
         end
-=end
+
 
 	describe "max " do
 		it "Return the max result as it is" do
@@ -1090,9 +1093,9 @@ class TestP1 < Minitest::Test
 		assert_equal standard, result
 	end
 
-=begin
+
 	def test_p1_find_1
-		result = (1..10).p1_find
+		result = (1..10).p1_find.to_a
 		standard = (1..10).find.to_a
 		assert_equal standard, result
 	end
@@ -1109,7 +1112,7 @@ class TestP1 < Minitest::Test
 		assert_equal standard, result
 	end
 
-
+=begin
 	def test_p1_each_with_index_1
 		hash = Hash.new
 		%w(cat dog wombat).p1_each_with_index { |item, index| hash[item] = index }
@@ -1194,7 +1197,7 @@ class TestP1 < Minitest::Test
 		standard = (1..4).collect.to_a
 		assert_equal standard, result
 	end
-
+=end
 	def test_p1_inject_1
 		result = (5..10).p1_inject(2) { |product, n| product * n }
 		standard = (5..10).inject(2) { |product, n| product * n }
@@ -1212,13 +1215,13 @@ class TestP1 < Minitest::Test
 		standard = (5..10).inject(:+)
 		assert_equal standard, result
 	end
-=end
+
 end
 
 # ZIYI_KOU
 
 class P1Test < Minitest::Test	
-=begin
+
 	def test_inject
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(10){ rand(0..10).to_s }
@@ -1234,7 +1237,7 @@ class P1Test < Minitest::Test
 		assert_equal hash_sample.p1_inject {|accumulator, item| accumulator[item.last]=item.first;accumulator}, hash_sample.inject {|accumulator, item| accumulator[item.last]=item.first;accumulator}
 		assert_nil extra_sample.p1_inject{|accumulator, item| accumulator+item},extra_sample.inject{|accumulator, item| accumulator+item}
 	end
-
+=begin
 	def test_collect
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(10){ rand(0..10).to_s }
@@ -1284,7 +1287,7 @@ class P1Test < Minitest::Test
 		str_sample=Array.new(10){ rand(1..1000).to_s }
 
 		assert_equal array_sample1.p1_chunk { |n| n.even?}.to_a,array_sample1.chunk { |n| n.even?}.to_a
-		#assert_equal Array.new(array_sample2.p1_chunk { |n| n.even?}).p1_collect {|x,y| y},array_sample2.chunk { |n| n.even?}.collect {|x,y| y}
+		assert_equal Array.new(array_sample2.p1_chunk { |n| n.even?}.collect {|x,y| y}),Array.new(array_sample2.chunk { |n| n.even?}.collect {|x,y| y})
 		assert_equal str_sample.p1_chunk { |n| n.length}.to_a,str_sample.chunk { |n| n.length}.to_a
 	end
 =begin
@@ -1306,7 +1309,7 @@ class P1Test < Minitest::Test
 		hash_sample.each_with_index {|item,index| gt_repo<<item}
 		assert_equal test_repo,gt_repo
 	end
-
+=end
 	def test_find
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(10){ rand(1..1000).to_s }
@@ -1318,7 +1321,7 @@ class P1Test < Minitest::Test
 		assert_equal str_sample.p1_find {|item| item.length>2},str_sample.find {|item| item.length>1}
 		assert_equal hash_sample.p1_find {|item| item.first>1},hash_sample.find {|item| item.first>1}
 	end
-=end
+
 	def test_max
 		array_sample1=Array.new
 		array_sample2=Array.new([3,2,6,3])
