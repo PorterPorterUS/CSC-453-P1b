@@ -463,7 +463,6 @@ class TestP1 <  Minitest::Test
     res2 = [].p1_all? 
     assert_equal res1, res2
   end
-=begin
   def test_p1_zip1
     a = [ 4, 5, 6 ]
     b = [ 7, 8, 9 ]
@@ -505,7 +504,6 @@ class TestP1 <  Minitest::Test
     a.zip(b) { |x, y| c2 << x + y }
     assert_equal c1, c2
   end
-=end
   def test_p1_find
     res1 = (1..10).find   { |i| i % 5 == 0 and i % 7 == 0 }
     res2 = (1..10).p1_find   { |i| i % 5 == 0 and i % 7 == 0 }
@@ -697,7 +695,6 @@ describe "Array: P1" do
 			result.must_equal []
                 end
         end
-=begin
 	describe "each_with_index " do
                 it "Create hash values from the indices" do
 			input_array = %w[cat dog wombat]
@@ -730,7 +727,6 @@ describe "Array: P1" do
 			is_called.must_equal false
                 end
         end
-=end
 	describe "find " do
                 it "Won't find an element and return nil" do
 			result = [*(2..10)].p1_find { |i| i % 5 == 0 and i % 7 == 0 } 	
@@ -866,8 +862,7 @@ describe "Array: P1" do
                         result.must_equal []
                 end	
         end
-
-
+=end
 	describe "zip " do
                 it "Add up values from 2 arrays" do
 			c = []
@@ -938,7 +933,6 @@ describe "Array: P1" do
                         result.must_be_nil
                 end
         end
-=end
 	describe "slice_after " do
                 it "Group numbers from odd to even" do
                         result_arr = [1, 2, 3, 4, 5].p1_slice_after do |item|
@@ -1290,7 +1284,6 @@ class P1Test < Minitest::Test
 		assert_equal Array.new(array_sample2.p1_chunk { |n| n.even?}.collect {|x,y| y}),Array.new(array_sample2.chunk { |n| n.even?}.collect {|x,y| y})
 		assert_equal str_sample.p1_chunk { |n| n.length}.to_a,str_sample.chunk { |n| n.length}.to_a
 	end
-=begin
 	def test_each_with_index
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(10){ rand(1..1000).to_s }
@@ -1309,7 +1302,6 @@ class P1Test < Minitest::Test
 		hash_sample.each_with_index {|item,index| gt_repo<<item}
 		assert_equal test_repo,gt_repo
 	end
-=end
 	def test_find
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(10){ rand(1..1000).to_s }
