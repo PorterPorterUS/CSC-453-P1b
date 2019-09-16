@@ -72,7 +72,7 @@ module P1
                 end
       		true
    	end
-   
+
 	def p1_chunk
  		result = inject [] do |acc, e|
 			if !block_given? or yield(e).nil?
@@ -95,11 +95,11 @@ module P1
 
 		match = lambda do |e|
 			if args.length == 1
-				args[0] === e	
+				args[0] === e
                         elsif block_given?
                                 yield(e)
                         end
-                end			
+                end
 		result = inject [[]] do |acc, e|
 			if !match[e]
                                 (acc[-1] << e) && acc
@@ -225,4 +225,15 @@ module P1
 		end
 		self
 	end
+
+
+		def p1_collect()
+			return p1_inject([]){|a,b| a.push(yield b)} if block_given?
+			return self.to_a
+		end
+
+		def p1_select()
+			return p1_inject([]){|a,b| (yield b) ? a.push(b) : a } if block_given?
+			return self.to_a
+		end
 end
