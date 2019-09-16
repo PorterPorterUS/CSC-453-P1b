@@ -191,4 +191,38 @@ module P1
 
 		return [min_item,max_item]
 	end
+
+	def p1_zip(*args, &block)
+		# Check whether all args are enumerable
+		args.each do |arr|
+			if !arr.respond_to? :each
+				raise TypeError, "wrong argument type #{arr.class} (must respond to :each)"
+			end
+		end
+
+		ret = []
+		# TODO: change to p1_each_with_index
+		self.each_with_index do |item, index|
+			tmp = [item]
+			args.each do |arr|
+				tmp << ((index >= arr.length) ? nil : arr[index])
+			end
+			ret << tmp
+		end
+		if block_given?
+			#TODO: change to p1_collect
+			ret.collect {|elem| yield(*elem)}
+			return nil
+		end
+		return ret
+	end
+
+	def p1_each_with_index(*args)
+		index = 0
+		each(*args) do |elem|
+			yield(elem, index)
+			index += 1
+		end
+		self
+	end
 end
