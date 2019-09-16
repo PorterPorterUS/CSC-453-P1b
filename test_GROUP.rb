@@ -282,13 +282,7 @@ end
 
 class P1_Test
   def self.testSets
-	  return [AllTests, ChunkTests, SliceAfterTests, MinmaxTests, MaxTests, InjectTests, FindTests
-=begin
-	CollectTests, SelectTests, EachWithIndexTests, ZipTests		  
-	  
-=end
-]
-
+	  return [AllTests, ChunkTests, SliceAfterTests, MinmaxTests, MaxTests, InjectTests, FindTests, CollectTests, SelectTests, EachWithIndexTests, ZipTests]
   end
 
   testSets.each{ |testSet| extend testSet }
@@ -326,18 +320,17 @@ class TestP1 <  Minitest::Test
   end
 
   def test_p1_inject_with_inital_and_sym
-    res1 = (5..10).p1_inject(1, :*) 
+    res1 = (5..10).p1_inject(1, :*)
     res2 = (5..10).inject(1, :*)
     assert_equal res1, res2
   end
 
   def test_p1_inject_with_sym
-    res1 = (5..10).p1_inject(:+) 
+    res1 = (5..10).p1_inject(:+)
     res2 = (5..10).inject(:+)
     assert_equal res1, res2
   end
 
-=begin
   def test_p1_collect
     res1 = (1..4).collect { |i| i*i }
     res2 = (1..4).p1_collect { |i| i*i }
@@ -347,14 +340,14 @@ class TestP1 <  Minitest::Test
   def test_p1_each_with_index
     hash1 = Hash.new
     hash2 = Hash.new
-    
+
     %w(cat dog wombat).each_with_index { |item, index|
       hash1[item] = index
     }
     %w(cat dog wombat).p1_each_with_index { |item, index|
       hash2[item] = index
     }
-    
+
     assert_equal hash1, hash2
   end
 
@@ -375,7 +368,6 @@ class TestP1 <  Minitest::Test
     res2 = [:foo, :bar].p1_select { |x| x == :foo }
     assert_equal res1, res2
   end
-=end
 
   def test_p1_max
     a = %w(albatross dog horse)
@@ -417,7 +409,7 @@ class TestP1 <  Minitest::Test
     res2 = [5, 1, 3, 4, 2].p1_max(3)
     assert_equal res1, res2
   end
-  
+
   def test_p1_chunk
     res1 = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5].p1_chunk { |n|
       n.even?
@@ -454,13 +446,13 @@ class TestP1 <  Minitest::Test
 
   def test_p1_all5
     res1 = [nil, true, 99].all?
-    res2 = [nil, true, 99].p1_all? 
+    res2 = [nil, true, 99].p1_all?
     assert_equal res1, res2
   end
 
   def test_p1_all6
     res1 = [].all?
-    res2 = [].p1_all? 
+    res2 = [].p1_all?
     assert_equal res1, res2
   end
   def test_p1_zip1
@@ -482,16 +474,16 @@ class TestP1 <  Minitest::Test
   def test_p1_zip3
     a = [ 4, 5, 6 ]
     b = [ 7, 8, 9 ]
-    res1 = [1, 2].zip(a, b) 
-    res2 = [1, 2].p1_zip(a, b) 
+    res1 = [1, 2].zip(a, b)
+    res2 = [1, 2].p1_zip(a, b)
     assert_equal res1, res2
   end
 
   def test_p1_zip4
     a = [ 4, 5, 6 ]
     b = [ 7, 8, 9 ]
-    res1 = a.zip([1, 2], [8]) 
-    res2 = a.p1_zip([1, 2], [8]) 
+    res1 = a.zip([1, 2], [8])
+    res2 = a.p1_zip([1, 2], [8])
     assert_equal res1, res2
   end
 
@@ -583,7 +575,7 @@ describe "Array: P1" do
 			result.must_equal 24
                 end
 
-		it "Return the longest word" do 
+		it "Return the longest word" do
 			result = %w{cat sheep bear}.p1_inject do |memo, word|
 				memo.length > word.length ? memo : word
 			end
@@ -603,22 +595,21 @@ describe "Array: P1" do
                 end
 	end
 
-=begin
 	describe "collect " do
 		before do
 			@input_arr = [1, 2, 3, 4]
 		end
 
                 it "Square all numbers" do
-                        result_arr = @input_arr.p1_collect do |i| 
-				i * i 
+                        result_arr = @input_arr.p1_collect do |i|
+				i * i
 			end
 			result_arr.must_equal [1, 4, 9, 16]
 			result_arr.object_id.wont_equal @input_arr.object_id
                 end
 
 		it "Replace all numbers with cat" do
-                        result_arr = @input_arr.p1_collect do 
+                        result_arr = @input_arr.p1_collect do
 				"cat"
 			end
                         result_arr.must_equal ["cat"] * 4
@@ -630,10 +621,10 @@ describe "Array: P1" do
 			result_arr.must_equal []
                 end
         end
-=end
+
 	describe "all? " do
 		it "Return true when all words are longer than 2 characters" do
-			result = %w[ant bear cat].p1_all? do |word| 
+			result = %w[ant bear cat].p1_all? do |word|
 				word.length >= 3
 			end
                         result.must_equal true
@@ -729,10 +720,10 @@ describe "Array: P1" do
         end
 	describe "find " do
                 it "Won't find an element and return nil" do
-			result = [*(2..10)].p1_find { |i| i % 5 == 0 and i % 7 == 0 } 	
+			result = [*(2..10)].p1_find { |i| i % 5 == 0 and i % 7 == 0 }
                         result.must_be_nil
                 end
-		
+
 		it "Find an element and return the element" do
                         result = [*(2..100)].p1_find { |i| i % 5 == 0 and i % 7 == 0 }
                         result.must_equal 35
@@ -752,7 +743,7 @@ describe "Array: P1" do
 
 	describe "max " do
 		it "Return the max result as it is" do
-                        result = %w[albatross dog horse].p1_max do |a, b| 
+                        result = %w[albatross dog horse].p1_max do |a, b|
                                 a.length <=> b.length
                         end
                         result.must_equal "albatross"
@@ -801,7 +792,7 @@ describe "Array: P1" do
 
 	describe "minmax " do
                 it "Find min max words" do
-                        result = %w[albatross dog horse].p1_minmax do |a, b| 
+                        result = %w[albatross dog horse].p1_minmax do |a, b|
 				a.length <=> b.length
 			end
 			result.must_equal ["dog", "albatross"]
@@ -834,7 +825,6 @@ describe "Array: P1" do
                 end
 
 	end
-=begin
 	describe "select " do
                 it "Select all the even numbers" do
                         result = [1, 2, 3, 4, 5].p1_select do |num|
@@ -860,9 +850,8 @@ describe "Array: P1" do
 		it "Won't select for empty input" do
                         result = [].p1_select {}
                         result.must_equal []
-                end	
+                end
         end
-=end
 	describe "zip " do
                 it "Add up values from 2 arrays" do
 			c = []
@@ -918,7 +907,7 @@ describe "Array: P1" do
 			result = [1, 2, 3].p1_zip [4, 5, 6], [7, 8, 9]
                         result.must_equal [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
 		end
-		
+
 		it "Zip up unequal size arrays" do
                         result = [4, 5, 6].p1_zip [1, 2], [8]
                         result.must_equal [[4, 1, 8], [5, 2, nil], [6, nil, nil]]
@@ -1023,7 +1012,6 @@ class TestP1 < Minitest::Test
 		standard = ["fead", 1, "fd", 2, 7, "tes"].slice_after(String).to_a
 		assert_equal standard, result
 	end
-=begin
 	def test_p1_select_1
 		result = (1..10).p1_select
 		standard = (1..10).select.to_a
@@ -1041,7 +1029,6 @@ class TestP1 < Minitest::Test
 		standard = [1, 2 ,3 ,4 ,5].select { |num| num.even? }.to_a
 		assert_equal standard, result
 	end
-=end
 	def test_p1_minmax_1
 		a = %w(dog alfdsfad horse)
 		result = a.p1_minmax { |a, b| a.length <=> b.length }
@@ -1173,7 +1160,6 @@ class TestP1 < Minitest::Test
 		assert_equal standard, result
 	end
 
-=begin
 	def test_p1_collect_1
 		result = (1..4).p1_collect { "cat" }
 		standard = (1..4).collect { "cat" }
@@ -1191,7 +1177,6 @@ class TestP1 < Minitest::Test
 		standard = (1..4).collect.to_a
 		assert_equal standard, result
 	end
-=end
 	def test_p1_inject_1
 		result = (5..10).p1_inject(2) { |product, n| product * n }
 		standard = (5..10).inject(2) { |product, n| product * n }
@@ -1214,7 +1199,7 @@ end
 
 # ZIYI_KOU
 
-class P1Test < Minitest::Test	
+class P1Test < Minitest::Test
 
 	def test_inject
 		array_sample=Array.new(10){ rand(0..10) }
@@ -1231,7 +1216,6 @@ class P1Test < Minitest::Test
 		assert_equal hash_sample.p1_inject {|accumulator, item| accumulator[item.last]=item.first;accumulator}, hash_sample.inject {|accumulator, item| accumulator[item.last]=item.first;accumulator}
 		assert_nil extra_sample.p1_inject{|accumulator, item| accumulator+item},extra_sample.inject{|accumulator, item| accumulator+item}
 	end
-=begin
 	def test_collect
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(10){ rand(0..10).to_s }
@@ -1257,7 +1241,6 @@ class P1Test < Minitest::Test
 		assert_equal hash_sample.p1_select {|k,v| v*2}, hash_sample.select {|k,v| v*2}
 		assert_equal extra_sample.p1_select {|item| item.length>2}, extra_sample.select {|item| item.length>2}
 	end
-=end
 	def test_all
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(10){ rand(1..1000).to_s }
@@ -1338,7 +1321,7 @@ class P1Test < Minitest::Test
 		assert_equal str_sample.p1_minmax,str_sample.minmax
 		assert_equal str_sample.p1_minmax {|a, b| a.length <=> b.length},str_sample.minmax {|a, b| a.length <=> b.length}
 	end
-	
+
 	def test_slice_after
 		array_sample=Array.new(10){ rand(0..10) }
 		str_sample=Array.new(["foo\n", "bar\\\n", "baz\n", "\n", "qux\n"])
@@ -1363,4 +1346,3 @@ class P1Test < Minitest::Test
 	end
 =end
 end
-
