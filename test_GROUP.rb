@@ -1,3 +1,9 @@
+=begin
+        CSC 253/453 Project 1b: Iterators in Ruby
+        September 17 2019
+        CSC 253 Testing Groups 1
+=end
+
 require_relative "p1_GROUP"
 
 require 'minitest/autorun'
@@ -6,7 +12,7 @@ class Object
   include P1
 end
 
-# DARYL_BAGLEY
+# DARYL_BAGLEY tests
 TestResult = Struct.new(:actual, :expected)
 
 module InjectTests
@@ -106,11 +112,6 @@ module FindTests
   def Find_Singleton_Fail
     return TestResult.new([2014].p1_find{ |i| i%2 == 1 },nil)
   end
-=begin
-  def Find_If_None
-    return TestResult.new(["Yolo","Swag"].p1_find(:none){ |i| i.class == Symbol }, :none)
-  end
-=end
 
   def Find_Goose
     return TestResult.new(["Duck","Duck","Duck","Goose","Duck","Goosed","Duck","Goose, Duck"].p1_find(){ |i| /Goose/ === i }, "Goose")
@@ -302,7 +303,7 @@ end
 
 P1_Test.run
 
-# SHUANG_ZHAI
+# SHUANG_ZHAI tests
 
 class TestP1 <  Minitest::Test
 
@@ -598,7 +599,7 @@ class TestP1 <  Minitest::Test
   end
 end
 
-# SOUBHIK_GHOSH
+# SOUBHIK_GHOSH tests
 
 describe "Array: P1" do
 
@@ -1017,7 +1018,7 @@ describe "Array: P1" do
         end
 end
 
-# XIAOFEI_ZHOU
+# XIAOFEI_ZHOU tests
 
 class TestP1 < Minitest::Test
 	def test_p1_zip_1
@@ -1249,7 +1250,7 @@ class TestP1 < Minitest::Test
 
 end
 
-# ZIYI_KOU
+# ZIYI_KOU tests
 
 class P1Test < Minitest::Test
 
