@@ -341,15 +341,51 @@ class TestP1 <  Minitest::Test
     hash1 = Hash.new
     hash2 = Hash.new
 
-    %w(cat dog wombat).each_with_index { |item, index|
+    ret1 = %w(cat dog wombat).each_with_index { |item, index|
       hash1[item] = index
     }
-    %w(cat dog wombat).p1_each_with_index { |item, index|
+    ret2 = %w(cat dog wombat).p1_each_with_index { |item, index|
       hash2[item] = index
     }
 
     assert_equal hash1, hash2
+    assert_equal ret1, ret2
   end
+
+  def test_p1_each_with_index_list   
+    ret1 = ["cat", "dog", "wombat"].each_with_index.to_a
+    ret2 = ["cat", "dog", "wombat"].p1_each_with_index.to_a
+    
+    assert_equal ret1, ret2
+  end
+
+  def test_p1_each_with_index_empty_list   
+    ret1 = [].each_with_index.to_a
+    ret2 = [].p1_each_with_index.to_a
+    
+    assert_equal ret1, ret2
+  end
+
+  def test_p1_each_with_index_hash
+    ret1 = {"cat"=>1, "dog"=>2, "wombat"=>0}.each_with_index.to_a
+    ret2 = {"cat"=>1, "dog"=>2, "wombat"=>0}.p1_each_with_index.to_a
+    
+    assert_equal ret1, ret2
+  end
+
+  def test_p1_each_with_index_range
+    ret1 = (2..5).each_with_index.to_a
+    ret2 = (2..5).p1_each_with_index.to_a
+    
+    assert_equal ret1, ret2
+  end
+
+  def test_p1_collect
+    res1 = (1..4).collect { |i| i*i }
+    res2 = (1..4).p1_collect { |i| i*i }
+    assert_equal res1, res2
+  end
+
 
   def test_p1_select1
     res1 = (1..10).select { |i|  i % 3 == 0 }
@@ -496,6 +532,25 @@ class TestP1 <  Minitest::Test
     a.zip(b) { |x, y| c2 << x + y }
     assert_equal c1, c2
   end
+
+  def test_p1_zip6
+      hash = {"s"=>1, "d"=>2, "c"=>3}
+      list = [2, 3, 4 ,5]
+      assert_equal hash.zip(hash, list), hash.p1_zip(hash, list)
+  end
+
+  def test_p1_zip7
+      hash = {"s"=>1, "d"=>2, "c"=>3}
+      list = [2, 3, 4 ,5]
+      assert_equal list.zip(hash, list), list.p1_zip(hash, list)
+  end
+
+  def test_p1_zip8
+      hash = {}
+      list = [2, 3, 4 ,5]
+      assert_equal hash.zip(hash, list), hash.p1_zip(hash, list)
+  end
+
   def test_p1_find
     res1 = (1..10).find   { |i| i % 5 == 0 and i % 7 == 0 }
     res2 = (1..10).p1_find   { |i| i % 5 == 0 and i % 7 == 0 }
