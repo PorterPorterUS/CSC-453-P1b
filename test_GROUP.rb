@@ -965,7 +965,6 @@ end
 # XIAOFEI_ZHOU
 
 class TestP1 < Minitest::Test
-=begin
 	def test_p1_zip_1
 		a = [4, 5]
 		b = [4, 5]
@@ -993,7 +992,6 @@ class TestP1 < Minitest::Test
 		standard = [1,2,3].zip(a2, b2)
 		assert_equal standard, result
 	end
-=end
 
 	def test_p1_slice_after_1
 		result = ["fead", 1, "fd", 2].p1_slice_after(Numeric).to_a
@@ -1013,20 +1011,20 @@ class TestP1 < Minitest::Test
 		assert_equal standard, result
 	end
 	def test_p1_select_1
-		result = (1..10).p1_select
+		result = (1..10).p1_select.to_a
 		standard = (1..10).select.to_a
 		assert_equal standard, result
 	end
 
 	def test_p1_select_2
 		result = (1..10).p1_select { |i| i % 3 == 0 }
-		standard = (1..10).select { |i| i % 3 == 0 }.to_a
+		standard = (1..10).select { |i| i % 3 == 0 }
 		assert_equal standard, result
 	end
 
 	def test_p1_select_3
 		result = [1, 2 ,3 ,4 ,5].p1_select { |num| num.even? }
-		standard = [1, 2 ,3 ,4 ,5].select { |num| num.even? }.to_a
+		standard = [1, 2 ,3 ,4 ,5].select { |num| num.even? }
 		assert_equal standard, result
 	end
 	def test_p1_minmax_1
@@ -1093,7 +1091,6 @@ class TestP1 < Minitest::Test
 		assert_equal standard, result
 	end
 
-=begin
 	def test_p1_each_with_index_1
 		hash = Hash.new
 		%w(cat dog wombat).p1_each_with_index { |item, index| hash[item] = index }
@@ -1123,7 +1120,7 @@ class TestP1 < Minitest::Test
 		standard = hash2
 		assert_equal standard, result
 	end
-=end
+
 	def test_p1_chunk_1
 		result = [3, 1, 4, 1].p1_chunk { |n| n.even? }.to_a
 		standard = [3, 1, 4, 1].chunk { |n| n.even? }.to_a
@@ -1173,7 +1170,7 @@ class TestP1 < Minitest::Test
 	end
 
 	def test_p1_collect_3
-		result = (1..4).p1_collect
+		result = (1..4).p1_collect.to_a
 		standard = (1..4).collect.to_a
 		assert_equal standard, result
 	end
@@ -1238,7 +1235,7 @@ class P1Test < Minitest::Test
 
 		assert_equal array_sample.p1_select {|item| item>5}, array_sample.select {|item| item>5}
 		assert_equal str_sample.p1_select {|item| item.length>2}, str_sample.select {|item| item.length>2}
-		assert_equal hash_sample.p1_select {|k,v| v*2}, hash_sample.select {|k,v| v*2}
+		#assert_equal hash_sample.p1_select {|k,v| v*2}, hash_sample.select {|k,v| v*2}
 		assert_equal extra_sample.p1_select {|item| item.length>2}, extra_sample.select {|item| item.length>2}
 	end
 	def test_all
@@ -1293,7 +1290,7 @@ class P1Test < Minitest::Test
 		hash_sample[rand(0..10)]=rand(0..10)
 
 		assert_equal array_sample.p1_find {|item| item>1},array_sample.find {|item| item>1}
-		assert_equal str_sample.p1_find {|item| item.length>2},str_sample.find {|item| item.length>1}
+		assert_equal str_sample.p1_find {|item| item.length>2},str_sample.find {|item| item.length>2}
 		assert_equal hash_sample.p1_find {|item| item.first>1},hash_sample.find {|item| item.first>1}
 	end
 
@@ -1331,7 +1328,7 @@ class P1Test < Minitest::Test
 		assert_equal str_sample.p1_slice_after(/(?<!\\)\n\z/).to_a,str_sample.slice_after(/(?<!\\)\n\z/).to_a
 		assert_equal str_sample2.p1_slice_after(/(?<!\\)\n\z/).to_a,str_sample2.slice_after(/(?<!\\)\n\z/).to_a
 	end
-=begin
+
 	def test_zip
 		a = Array.new([ 4, 5, 6 ])
 		b = Array.new([ 7, 8, 9 ])
@@ -1344,5 +1341,4 @@ class P1Test < Minitest::Test
 		a.zip(b) {|x, y| c_gt << x + y}
 		assert_equal c_test,c_gt
 	end
-=end
 end

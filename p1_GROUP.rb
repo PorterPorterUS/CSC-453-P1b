@@ -1,5 +1,5 @@
 =begin
-       	CSC 253/453 Project 1b: Itertors in Ruby
+	CSC 253/453 Project 1b: Iterators in Ruby
 	September 17 2019
 =end
 
@@ -100,7 +100,7 @@ module P1
                                 yield(e)
                         end
                 end
-		result = inject [[]] do |acc, e|
+		result = p1_inject [[]] do |acc, e|
 			if !match[e]
                                 (acc[-1] << e) && acc
 			else
@@ -200,40 +200,55 @@ module P1
 			end
 		end
 
-		ret = []
-		# TODO: change to p1_each_with_index
-		self.each_with_index do |item, index|
-			tmp = [item]
-			args.each do |arr|
-				tmp << ((index >= arr.length) ? nil : arr[index])
+		block_args = []
+		args.p1_each_with_index do |arg, i|
+			index = 0
+			arg.each do |elem|
+				block_args[index].nil?? block_args[index] = [nil] * i + [elem]: block_args[index] << elem
+				index += 1
 			end
-			ret << tmp
-		end
-		if block_given?
-			#TODO: change to p1_collect
-			ret.collect {|elem| yield(*elem)}
-			return nil
-		end
-		return ret
+
+                end
+		index = 0
+		ret = []
+                each do |elem|
+			entry = [elem, *block_args[index]]
+			entry += [nil] * (args.length + 1 - entry.length)
+			if block_given?
+				yield(*entry)
+			else
+				ret << entry
+			end
+			index += 1
+                end
+                block_given?? nil: ret
 	end
 
 	def p1_each_with_index(*args)
 		index = 0
-		each(*args) do |elem|
-			yield(elem, index)
-			index += 1
-		end
-		self
+                if block_given?
+                        each(*args) do |elem|
+                                yield(elem, index)
+                                index += 1
+                        end
+                        return self
+                else
+                        result = []
+                        each do |elem|
+                                result << [elem, index]
+                                index += 1
+                        end
+                        return result.to_enum
+                end
 	end
 
+	def p1_collect
+		return p1_inject([]){|a,b| a.push(yield b)} if block_given?
+		return self.to_enum
+	end
 
-		def p1_collect()
-			return p1_inject([]){|a,b| a.push(yield b)} if block_given?
-			return self.to_a
-		end
-
-		def p1_select()
-			return p1_inject([]){|a,b| (yield b) ? a.push(b) : a } if block_given?
-			return self.to_a
-		end
+	def p1_select
+		return p1_inject([]){|a,b| (yield b) ? a.push(b) : a } if block_given?
+		return self.to_enum
+	end
 end
