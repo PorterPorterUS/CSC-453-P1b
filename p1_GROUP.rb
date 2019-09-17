@@ -112,84 +112,38 @@ module P1
 		result.to_enum
    	end
 
-	def p1_max(*args,&block)
-		if self.size==0
-			if args.size==0
-				return nil
+	def p1_max(n = nil)
+		match = lambda do |x, y|
+                        block_given?? yield(x, y): x <=> y
+                end
+		result = p1_inject (n.nil?? []: {0 => []}) do |res, e|
+			if res.is_a? Array
+				res[0] = e if res.empty? or match[res[0], e] < 0
 			else
-				return self
-			end
-		end
-
-		if args.size==0 && block.nil?
-			max_item=self[0]
-			self.drop(1).each do |item|
-				max_item = (max_item>item)? max_item:item
-			end
-			return max_item
-		elsif args.size==0
-			max_item=self[0]
-			self.drop(1).each do |item|
-				p yield(max_item,item)
-				max_item = yield(max_item,item)>0? max_item:item
-			end
-			return max_item
-		else
-			if args[0]==0
-				return self.clone.clear
-			end
-			res=Array.new
-			idx=(0...self.length).to_a
-			idx_exist=[]
-			num=args[0]
-			while num>0 and res.size!=self.size
-				max_idx=(idx-idx_exist)[0]
-				max_item=self[max_idx]
-				(idx-idx_exist-[max_idx]).each do |i|
-					if block.nil? && max_item<self[i]
-						max_item=self[i]
-						max_idx=i
-					elsif !block.nil? && yield(max_item,self[i])==-1
-						max_item=self[i]
-						max_idx=i
+				n.times do |i|
+					if res[0][i].nil?
+						res[0][i] = e
+						break
+					elsif match[res[0][i], e] < 0
+						res[0][i], e = e, res[0][i]
 					end
 				end
-				res<<max_item
-				idx_exist<<max_idx
-				num-=1
 			end
-
-			return res
-		end
-
+                        res
+                end
+                result[0]
 	end
 
-	def p1_minmax(*args, &block)
-		if self.size==0
-			return [nil,nil]
-		end
-
-		min_item=self[0]
-		max_item=self[0]
-		self.drop(1).each do |item|
-			if block.nil?
-				if max_item<item
-					max_item=item
-				end
-				if min_item>item
-					min_item=item
-				end
-			else
-				if yield(max_item,item)==-1
-					max_item=item
-				end
-				if yield(min_item,item)==1
-					min_item=item
-				end
-			end
-		end
-
-		return [min_item,max_item]
+	def p1_minmax
+		match = lambda do |x, y|
+                        block_given?? yield(x, y): x <=> y
+                end
+		result = p1_inject [nil, nil] do |res, e|
+			res[0] = e if res[0].nil? || match[res[0], e] > 0
+			res[1] = e if res[1].nil? || match[res[1], e] < 0
+			res
+                end
+		result
 	end
 
 	def p1_zip(*args, &block)
