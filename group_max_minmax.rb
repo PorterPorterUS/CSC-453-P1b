@@ -11,16 +11,15 @@ module P1
 		end
 
 		if args.size==0 && block.nil?
-			max_item=self[0]
+			max_item=self.first
 			self.drop(1).each do |item|
-				max_item = (max_item>item)? max_item:item
+				max_item = (max_item<=>item)? item:max_item
 			end
 			return max_item
 		elsif args.size==0
-			max_item=self[0]
+			max_item=self.first
 			self.drop(1).each do |item|
-				p yield(max_item,item)
-				max_item = yield(max_item,item)>0? max_item:item
+				max_item = yield(max_item,item)>=0? max_item:item
 			end
 			return max_item
 		else
@@ -33,13 +32,13 @@ module P1
 			num=args[0]
 			while num>0 and res.size!=self.size
 				max_idx=(idx-idx_exist)[0]
-				max_item=self[max_idx]
+				max_item=self.to_a[max_idx]
 				(idx-idx_exist-[max_idx]).each do |i|
 					if block.nil? && max_item<self[i]
-						max_item=self[i]
+						max_item=self.to_a[i]
 						max_idx=i
-					elsif !block.nil? && yield(max_item,self[i])==-1
-						max_item=self[i]
+					elsif !block.nil? && yield(max_item,self.to_a[i])==-1
+						max_item=self.to_a[i]
 						max_idx=i
 					end
 				end
@@ -58,14 +57,14 @@ module P1
 			return [nil,nil]
 		end
 
-		min_item=self[0]
-		max_item=self[0]
+		min_item=self.first
+		max_item=self.first
 		self.drop(1).each do |item|
 			if block.nil?
-				if max_item<item
+				if (max_item<=>item)<0
 					max_item=item
 				end
-				if min_item>item
+				if (min_item<=>item)>0
 					min_item=item
 				end
 			else
